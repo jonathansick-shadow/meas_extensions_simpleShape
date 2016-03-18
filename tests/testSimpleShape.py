@@ -63,7 +63,7 @@ class SimpleShapeTestCase(lsst.utils.tests.TestCase):
         image = lsst.afw.image.MaskedImageF(self.bbox)
         image.getImage().getArray()[:,:] = self.evaluateGaussian(dEllipse)
         wEllipse = el.Ellipse(wEllipseCore, wCenter)
-        result = SimpleShape.measure(wEllipse, image)
+        result = SimpleShape.computeMoments(wEllipse, image)
         return result
 
     def testCorrectWeightedMoments(self):
