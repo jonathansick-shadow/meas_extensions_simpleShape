@@ -31,6 +31,7 @@ import lsst.afw.geom.ellipses as el
 import lsst.afw.image
 from lsst.meas.extensions.simpleShape import SimpleShape
 
+
 class SimpleShapeTestCase(lsst.utils.tests.TestCase):
 
     def setUp(self):
@@ -38,19 +39,19 @@ class SimpleShapeTestCase(lsst.utils.tests.TestCase):
             el.Quadrupole(25.0, 25.0, 0.0),
             el.Quadrupole(27.0, 22.0, -5.0),
             el.Quadrupole(23.0, 28.0, 2.0),
-            ]
+        ]
         self.centers = [
             lsst.afw.geom.Point2D(0.0, 0.0),
             lsst.afw.geom.Point2D(2.0, 3.0),
             lsst.afw.geom.Point2D(-1.0, 2.5),
-            ]
+        ]
         for ellipseCore in self.ellipseCores:
             ellipseCore.scale(2)
         self.bbox = lsst.afw.geom.Box2I(lsst.afw.geom.Point2I(-500, -500), lsst.afw.geom.Point2I(50, 50))
         self.xg, self.yg = numpy.meshgrid(
             numpy.arange(self.bbox.getBeginX(), self.bbox.getEndX(), dtype=float),
             numpy.arange(self.bbox.getBeginY(), self.bbox.getEndY(), dtype=float)
-            )
+        )
 
     def evaluateGaussian(self, ellipse):
         gt = ellipse.getGridTransform()
@@ -61,7 +62,7 @@ class SimpleShapeTestCase(lsst.utils.tests.TestCase):
     def checkMoments(self, dEllipseCore, dCenter, wEllipseCore, wCenter):
         dEllipse = el.Ellipse(dEllipseCore, dCenter)
         image = lsst.afw.image.MaskedImageF(self.bbox)
-        image.getImage().getArray()[:,:] = self.evaluateGaussian(dEllipse)
+        image.getImage().getArray()[:, :] = self.evaluateGaussian(dEllipse)
         wEllipse = el.Ellipse(wEllipseCore, wCenter)
         result = SimpleShape.measure(wEllipse, image)
         return result
@@ -100,6 +101,7 @@ class SimpleShapeTestCase(lsst.utils.tests.TestCase):
                                  numpy.array(center),
                                  rtol=1E-8, atol=1E-15)
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
 
@@ -109,6 +111,7 @@ def suite():
     suites += unittest.makeSuite(SimpleShapeTestCase)
     suites += unittest.makeSuite(lsst.utils.tests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""
